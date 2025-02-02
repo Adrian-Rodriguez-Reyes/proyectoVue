@@ -61,8 +61,10 @@
             </button>
             <div class="menu-separator"></div>
             <div class="menu-title">Mover a:</div>
-            <button v-for="col in ['Por hacer', 'En proceso', 'Completado']" :key="col" class="menu-item"
-              :disabled="task.columna === col" @click="moveToColumn(col)">
+            <button v-for="col in ['Por hacer', 'En proceso', 'Completado']" :key="col"
+              class="menu-item"
+              :disabled="task.columna === col"
+              @click="moveToColumn(col)">
               {{ col }}
             </button>
           </div>
@@ -122,9 +124,11 @@ export default {
       this.showMobileMenu = !this.showMobileMenu;
     },
     moveToColumn(column) {
-      this.$emit('update-task-column', { ...this.task, columna: column });
-      this.$emit('save-task', { ...this.task });
-      this.showMobileMenu = false;
+      if (column !== this.task.columna) {
+        const updatedTask = { ...this.task, columna: column };
+        this.$emit('save-task', updatedTask);
+        this.showMobileMenu = false;
+      }
     },
     addToGoogleCalendar() {
       const title = this.task.texto;
@@ -181,17 +185,18 @@ export default {
 }
 
 .mobile-menu {
-  position: absolute;
-  right: 10px;
-  bottom: 100%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
-  width: 200px;
+  width: 90%;
+  max-width: 300px;
   padding: 8px 0;
-  margin-bottom: 5px;
 }
 
 .menu-item {

@@ -147,13 +147,13 @@ export default {
         this.tareas[index].editando = true;
       }
     },
-    guardarCambios(tareaEditado) {
-      const index = this.tareas.findIndex(t => t.id === tareaEditado.id);
+    guardarCambios(tareaEditada) {
+      const index = this.tareas.findIndex(t => t.id === tareaEditada.id);
       if (index !== -1) {
-        this.tareas.splice(index, 1, {
-          ...tareaEditado,
+        this.tareas[index] = {
+          ...tareaEditada,
           editando: false
-        });
+        };
         this.guardarTareas();
       }
     },
@@ -181,9 +181,9 @@ export default {
         const index = this.tareas.findIndex(t => t.id === this.tareaArrastrada.id);
         if (index !== -1) {
           this.tareas[index].columna = nuevaColumna;
+          this.guardarTareas();
+          this.finalizarArrastre();
         }
-        this.finalizarArrastre();
-        this.guardarTareas();
       }
     },
     guardarTareas() {
